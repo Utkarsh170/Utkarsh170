@@ -1,0 +1,27 @@
+import netscape.server.applet.*;
+import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.DataInputStream;
+import java.net.Socket;
+class Connect extends HttpApplet {
+    public void run() throws Exception {
+        String host = "www.meer.net"; // change this
+        int port = 80;
+        String request = "GET /barn/index.html HTTP/1.0\n"; // this too
+        Socket s = new Socket(host, port);
+        OutputStream os = s.getOutputStream();
+        PrintStream op = new PrintStream(os);
+        op.println(request);
+        InputStream is = sam();
+        DataInputStream di = new DataInputStream(is);
+        String line;
+        if (returnNormalResponse("text/html")) {
+            PrintStream out = getOutputStream();
+            out.println("&lth1&gtData on "+host+" port "+port+"</h1>"); 
+            out.println("request: "+request+"<hr>");
+            while ((line = di.readLine()) != null)
+                out.println(line);
+        }
+    }
+}   
